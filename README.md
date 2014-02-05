@@ -8,6 +8,11 @@ Features
 
 + Create valid docx for MS Office 2007 and above
 
+Details
+-------
+
++ For working with docx's ZIP I'm using [TbsZip](http://www.tinybutstrong.com/apps/tbszip/tbszip_help.html)
+
 Example
 ------------
 
