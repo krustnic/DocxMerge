@@ -26,6 +26,9 @@ class Docx {
     private $ALT_CHUNK_TYPE         = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk";
     private $ALT_CHUNK_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
 
+    // Array "zip path" => "content"
+    private $headerAndFootersArray = [];
+
     public function __construct( $docxPath ) {
         $this->docxPath = $docxPath;
 
@@ -78,6 +81,26 @@ class Docx {
         $this->docxContentTypes = substr_replace($this->docxContentTypes, $xmlItem, $p, 0);
     }
 
+    public function loadHeadersAndFooters() {
+        $relsXML = new SimpleXMLElement( $this->docxRels );
+        foreach( $relsXML as $rel ) {
+            if ( $rel["Type"] == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ||
+                 $rel["Type"] == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ) {
+                $path = "word/".$rel["Target"];
+                $this->headerAndFootersArray[ $path ] = $this->readContent( $path );
+            }
+        }
+    }
+
+    public function findAndReplace( $key, $value ) {
+        // Search/Replace in document
+        $this->docxDocument = str_replace( $key, $value, $this->docxDocument );
+        // Search/Replace in footers and headers
+        foreach( $this->headerAndFootersArray as $path => $content ) {
+            $this->headerAndFootersArray[$path] = str_replace( $key, $value, $content );
+        }
+    }
+
     public function flush() {
         // Save RELS data
         $this->writeContent( $this->docxRels, $this->RELS_ZIP_PATH );
@@ -85,6 +108,10 @@ class Docx {
         $this->writeContent( $this->docxDocument, $this->DOC_ZIP_PATH );
         // Save CONTENT TYPES data
         $this->writeContent( $this->docxContentTypes, $this->CONTENT_TYPES_PATH );
+        // Save footers and headers
+        foreach( $this->headerAndFootersArray as $path => $content ) {
+            $this->writeContent( $content, $path );
+        }
 
         // Save the merge into a third file
         // We cannot save to current file because it damage ZIP file

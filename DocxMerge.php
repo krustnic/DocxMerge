@@ -48,4 +48,24 @@ class DocxMerge {
         return 0;
     }
 
+    public function setValues( $templateFilePath, $outputFilePath, $data ) {
+
+        if ( !file_exists( $templateFilePath ) ) {
+            return -1;
+        }
+
+        if ( !copy( $templateFilePath, $outputFilePath ) ) {
+            // Cannot create output file
+            return -2;
+        }
+
+        $docx = new Docx( $outputFilePath );
+        $docx->loadHeadersAndFooters();
+        foreach( $data as $key => $value ) {
+            $docx->findAndReplace( "\${".$key."}", $value );
+        }
+
+        $docx->flush();
+    }
+
 }
