@@ -120,7 +120,8 @@ class Docx {
         $this->docxZip->Flush(TBSZIP_FILE, $tempFile);
 
         // Replace current file with tempFile content
-        rename( $tempFile, $this->docxPath );
+        //rename( $tempFile, $this->docxPath );
+        copy( $tempFile, $this->docxPath );
     }
 
 } 
