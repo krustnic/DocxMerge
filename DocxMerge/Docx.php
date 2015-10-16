@@ -51,12 +51,12 @@ class Docx {
         return 0;
     }
 
-    public function addFile( $filePath, $zipName, $refID ) {
+    public function addFile( $filePath, $zipName, $refID, $addPageBreak = false ) {
         $content = file_get_contents( $filePath );
         $this->docxZip->FileAdd( $zipName, $content );
 
         $this->addReference( $zipName, $refID );
-        $this->addAltChunk( $refID );
+        $this->addAltChunk( $refID, $addPageBreak );
         $this->addContentType( $zipName );
     }
 
@@ -67,8 +67,9 @@ class Docx {
         $this->docxRels = substr_replace($this->docxRels, $relXmlString, $p, 0);
     }
 
-    private function addAltChunk( $refID ) {
-        $xmlItem = '<w:altChunk r:id="'.$refID.'"/>';
+    private function addAltChunk( $refID, $addPageBreak ) {
+        $pagebreak = $addPageBreak ? '<w:p><w:r><w:br w:type="page" /></w:r></w:p>' : '';
+        $xmlItem = $pagebreak.'<w:altChunk r:id="'.$refID.'"/>';
 
         $p = strpos($this->docxDocument, '</w:body>');
         $this->docxDocument = substr_replace($this->docxDocument, $xmlItem, $p, 0);
