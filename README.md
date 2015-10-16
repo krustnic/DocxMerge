@@ -6,7 +6,8 @@ Simple library for merging multiple MS Word ".docx" files into one
 Features
 --------
 
-+ Create valid docx for MS Office 2007 and above
++ Merge docx files generating valid docx for MS Office 2007 and above
++ Add a page break between documents merged
 
 Details
 -------
@@ -21,7 +22,7 @@ Merge Example
 	$dm->merge( [
         "templates/TplPage1.docx",
         "templates/TplPage2.docx"
-    ], "/tmp/result.docx" );
+    ], "/tmp/result.docx", true );
 
 
 setValues Example
