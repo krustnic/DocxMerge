@@ -128,4 +128,10 @@ class Docx {
         }
     }
 
+    public function prepare() {
+        $prettify = new Prettify();
+
+        $this->docxDocument = $prettify->removeTags( $this->docxDocument );
+    }
+
 } 
