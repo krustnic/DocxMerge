@@ -1,10 +1,12 @@
 {
   "name": "krustnic/docx-merge",
+  "type": "library",
   "description": "Simple library for merging multiple MS Word \".docx\" files into one",
-  "license": "GNU",
+  "keywords": ["docx","merge","placeholder"],
+  "license": "MIT",
   "authors": [
     {
-      "name": "krustnic",
+      "name": "Mityakov Aleksandr",
       "email": "avmityakov@gmail.com"
     }
   ],
