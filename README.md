@@ -13,10 +13,17 @@ Details
 
 + For working with docx's ZIP I'm using [TbsZip](http://www.tinybutstrong.com/apps/tbszip/tbszip_help.html)
 
+Install
+-------
+
+    php composer.phar require krustnic/docx-merge
+
 Merge Example
 -------------
 
-	require("DocxMerge.php");
+    require "vendor/autoload.php";
+    use DocxMerge\DocxMerge;
+    
 	$dm = new DocxMerge();
 	$dm->merge( [
         "templates/TplPage1.docx",
@@ -29,7 +36,9 @@ setValues Example
 
 	# Use "${NAME}" in docx file to create placeholders
 
-	require("DocxMerge.php");
+	require "vendor/autoload.php";
+    use DocxMerge\DocxMerge;
+    
 	$dm = new DocxMerge();
 	$dm->setValues( "templates/template.docx",
                     "templates/result.docx",
