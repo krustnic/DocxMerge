@@ -53,6 +53,7 @@ class DocxMerge {
         }
 
         $docx = new Docx( $outputFilePath );
+        $docx->prepare();
         $docx->loadHeadersAndFooters();
         foreach( $data as $key => $value ) {
             $docx->findAndReplace( "\${".$key."}", $value );
