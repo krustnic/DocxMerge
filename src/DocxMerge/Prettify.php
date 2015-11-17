@@ -29,7 +29,8 @@ namespace DocxMerge\DocxMerge;
             $bracketIdx = strpos( $str, '{', $idx );
             $space      = substr( $str, $idx + 1, $bracketIdx - $idx - 1 );
 
-            if ( $space != "" && simplexml_load_string( $space, 'SimpleXMLElement', LIBXML_NOERROR  ) === FALSE ) return FALSE;
+            //if ( $space != "" && simplexml_load_string( $space, 'SimpleXMLElement', LIBXML_NOERROR  ) === FALSE ) return FALSE;
+            if ( $space != "" && strip_tags( $space ) != "" ) return FALSE;
 
             $str = substr_replace( $str, '', $idx + 1, $bracketIdx - $idx - 1 );
 
