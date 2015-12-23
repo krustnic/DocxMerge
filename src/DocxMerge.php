@@ -55,8 +55,37 @@ class DocxMerge {
         $docx = new Docx( $outputFilePath );
         $docx->prepare();
         $docx->loadHeadersAndFooters();
+        
+        // Add table rows
+        if ( array_key_exists( "tables", $data ) ) {
+            $firstTable = $data["tables"][0];
+
+            foreach( $firstTable as $key => $value ) {
+                // Get first placeholder count (other should be same length)
+                $rowCount = count( $firstTable[ $key ] );
+
+                // Copy row with specified placeholder N times
+                $docx->copyRowWithPlaceholder( $key, $rowCount - 1 );
+                break;
+            }
+        }
+        
         foreach( $data as $key => $value ) {
+            // Skip table placeholders
+            if ( $key == "tables" ) continue;
+
             $docx->findAndReplace( "\${".$key."}", $value );
+        }
+
+        // Fill tables
+        if ( array_key_exists( "tables", $data ) ) {
+            $firstTable = $data["tables"][0];
+
+            foreach( $firstTable as $key => $valueArray ) {
+                foreach( $valueArray as $value ) {
+                    $docx->findAndReplaceFirst( "\${".$key."}", $value );
+                }
+            }
         }
 
         $docx->flush();

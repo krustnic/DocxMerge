@@ -105,6 +105,16 @@ class Docx {
         }
     }
 
+    public function findAndReplaceFirst( $key, $value ) {
+        // Search/Replace first key in document                
+        if ( strpos( $this->docxDocument, $key ) === FALSE ) return;
+        if ( strpos( $this->docxDocument, $key ) + strlen( $key ) === FALSE ) return;
+
+        $leftPart  = substr( $this->docxDocument, 0, strpos( $this->docxDocument, $key ) );
+        $rightPart = substr( $this->docxDocument, strpos( $this->docxDocument, $key ) + strlen( $key ) );
+        $this->docxDocument = $leftPart.$value.$rightPart;
+    }
+
     public function flush() {
         // Save RELS data
         $this->writeContent( $this->docxRels, $this->RELS_ZIP_PATH );
@@ -130,6 +140,38 @@ class Docx {
         else {
             rename($tempFile, $this->docxPath);
         }
+    }
+
+    public function copyRowWithPlaceholder( $placeholder, $N ) {
+        $needle = "\${".$placeholder."}";
+
+        $pos = strpos( $this->docxDocument, $needle );
+        if ( $pos !== FALSE ) {
+            // find tables's tr
+            $trBeginPos = strrpos( substr( $this->docxDocument, 0, $pos ), "<w:tr " );
+
+            if ( $trBeginPos === FALSE ) {
+                return;
+            }
+
+            $trEndPos = strpos( substr( $this->docxDocument, $pos ), "</w:tr>" );
+
+            if ( $trEndPos === FALSE ) {
+                return;
+            }
+
+            $trEndPos += $pos + 7;
+
+            $trBody = substr( $this->docxDocument, $trBeginPos, $trEndPos - $trBeginPos );
+            $result = "";
+
+            for( $i=0; $i<$N; $i++ ) {
+                $result .= $trBody;
+            }
+
+            // insert new rows
+            $this->docxDocument = substr_replace( $this->docxDocument, $result, $trEndPos, 0 );
+        }        
     }
 
     public function prepare() {
