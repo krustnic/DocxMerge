@@ -85,7 +85,7 @@ class Docx {
     }
 
     public function loadHeadersAndFooters() {
-        $relsXML = new SimpleXMLElement( $this->docxRels );
+        $relsXML = new \SimpleXMLElement( $this->docxRels );
         foreach( $relsXML as $rel ) {
             if ( $rel["Type"] == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ||
                  $rel["Type"] == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ) {
