@@ -7,7 +7,7 @@ Features
 --------
 
 + Merge docx files generating valid docx for MS Office 2007 and above
-+ Add a page break between documents merged
++ Add a page break between merged documents
 
 Details
 -------
