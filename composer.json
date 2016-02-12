@@ -1,0 +1,31 @@
+{
+  "name"       : "jupitern/docxmerge",
+  "description": "php docx file merge",
+  "keywords"   : ["docx", "php"],
+  "homepage"   : "https://github.com/jupitern/docxmerge",
+  "license"    : "MIT",
+  "authors"    : [
+    {
+      "name"    : "Nuno Chaves",
+      "email"   : "nunochaves@sapo.pt",
+      "role"    : "Developer"
+    }
+  ],
+  "support": {
+    "source": "https://github.com/jupitern/docxmerge",
+    "issues": "https://github.com/jupitern/docxmerge/issues"
+  },
+  "require"    :{
+    "php":">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jupitern\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+
+    }
+  }
+}
