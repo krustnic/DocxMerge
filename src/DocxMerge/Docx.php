@@ -160,10 +160,7 @@ class Docx {
                 $idx += 1;
             }
 
-            //echo $wrTag;
-            //$replaceString = '<w:r><w:rPr><w:b/><w:u w:val="single"/></w:rPr><w:t>Петрова Виолетта Михайловна</w:t></w:r>';
             $this->docxDocument = substr( $this->docxDocument, 0, $wrStartPosition ).$insertString.substr( $this->docxDocument, $wrStopPosition);
-            //echo substr( $this->docxDocument, $wrStartPosition, $wrStopPosition - $wrStartPosition );
         }
     }
 
