@@ -96,7 +96,86 @@ class Docx {
         }
     }
 
+    /* Add styles for text */
+
+    private function findAndReplaceWithStyles( $key, $value ) {
+        $lastPos = 0;
+        $positions = array();
+
+        while (($lastPos = strpos($this->docxDocument, $key, $lastPos))!== false) {
+            $positions[] = $lastPos;
+            $lastPos = $lastPos + strlen($key);
+        }
+
+        foreach ($positions as $position) {
+            $wrStartPosition1 = strrpos( substr( $this->docxDocument, 0, $position ), "<w:r " );
+            $wrStartPosition2 = strrpos( substr( $this->docxDocument, 0, $position ), "<w:r>" );
+
+            if ( $wrStartPosition1 === FALSE && $wrStartPosition2 === FALSE ) continue;
+            if ( $wrStartPosition1 === FALSE ) $wrStartPosition = $wrStartPosition2;
+            if ( $wrStartPosition2 === FALSE ) $wrStartPosition = $wrStartPosition1;
+            if ( $wrStartPosition1 !== FALSE && $wrStartPosition2 !== FALSE ) {
+                $wrStartPosition = max( $wrStartPosition1, $wrStartPosition2 );
+            }
+
+            $wrStopPosition    = strpos( substr( $this->docxDocument, $position ), "</w:r>" ) + $position + 6;
+
+            // Use placeholder w:r id-s
+            $wrTagStopPosition = strpos( substr( $this->docxDocument, $wrStartPosition ), ">" ) + $wrStartPosition + 1;
+            $wrTag = substr( $this->docxDocument, $wrStartPosition, $wrTagStopPosition - $wrStartPosition );
+
+            // Use placeholder styles
+            $wPrStartPosition  = strpos( substr( $this->docxDocument, $wrStartPosition ), "<w:rPr" ) + $wrStartPosition;
+            $wPrStopPosition   = strpos( substr( $this->docxDocument, $wPrStartPosition ), "</w:rPr>" ) + $wPrStartPosition;
+            $wPrTag = substr( $this->docxDocument, $wPrStartPosition, $wPrStopPosition - $wPrStartPosition );
+
+            $insertString = "";
+            $idx = 0;
+            $len = count( $value );
+            foreach( $value as $word ) {
+                $wPrStyles = $wPrTag;
+                foreach( $word["decoration"] as $style ) {
+                    if ( $style == "bold" ) {
+                        $wPrStyles .= "<w:b/>";
+                    }
+
+                    if ( $style == "italic" ) {
+                        $wPrStyles .= "<w:i />";
+                    }
+
+                    if ( $style == "underline" ) {
+                        $wPrStyles .= '<w:u w:val="single"/>';
+                    }
+                }
+                $wPrStyles .= "</w:rPr>";
+
+                $insertPart = $wrTag.$wPrStyles.'<w:t xml:space="preserve">'.$word["value"].'</w:t></w:r>';
+                $insertString .= $insertPart;
+
+                // Add space between words, except last
+                if ( $idx != $len - 1 ) {
+                    $insertString .= '<w:r><w:t xml:space="preserve"> </w:t></w:r>';
+                }
+
+                $idx += 1;
+            }
+
+            //echo $wrTag;
+            //$replaceString = '<w:r><w:rPr><w:b/><w:u w:val="single"/></w:rPr><w:t>Петрова Виолетта Михайловна</w:t></w:r>';
+            $this->docxDocument = substr( $this->docxDocument, 0, $wrStartPosition ).$insertString.substr( $this->docxDocument, $wrStopPosition);
+            //echo substr( $this->docxDocument, $wrStartPosition, $wrStopPosition - $wrStartPosition );
+        }
+    }
+
+    /* end */
+
     public function findAndReplace( $key, $value ) {
+        // Apply styles
+        if ( is_array( $value ) ) {
+            $this->findAndReplaceWithStyles($key, $value);
+            return;
+        }
+
         // Search/Replace in document
         $this->docxDocument = str_replace( $key, $value, $this->docxDocument );
         // Search/Replace in footers and headers

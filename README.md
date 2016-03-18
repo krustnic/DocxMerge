@@ -43,3 +43,20 @@ setValues Example
 	$dm->setValues( "templates/template.docx",
                     "templates/result.docx",
     				array( "NAME" => "Sterling", "SURNAME" => "Archer" ) );
+    				
+Or with styles ("bold", "italic", "underline"):
+    
+    $dm->setValues( "templates/template.docx",
+                    "templates/result.docx",
+                    [ 
+        			    "NAME" => [
+        			        [
+                                "value"      => "Sterling",
+                                "decoration" => [ "bold", "italic" ]
+        			        ],
+        			        [
+                                "value"      => "Archer",
+                                "decoration" => [ "bold", "underline" ] 
+        			        ]
+        			    ]
+                    ]);
