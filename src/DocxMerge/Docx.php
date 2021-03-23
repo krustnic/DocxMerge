@@ -172,7 +172,9 @@ class Docx {
             $this->findAndReplaceWithStyles($key, $value);
             return;
         }
-
+        
+        $value = htmlspecialchars( $value );
+        
         // Search/Replace in document
         $this->docxDocument = str_replace( $key, $value, $this->docxDocument );
         // Search/Replace in footers and headers
@@ -186,6 +188,8 @@ class Docx {
         if ( strpos( $this->docxDocument, $key ) === FALSE ) return;
         if ( strpos( $this->docxDocument, $key ) + strlen( $key ) === FALSE ) return;
 
+        $value = htmlspecialchars( $value );
+        
         $leftPart  = substr( $this->docxDocument, 0, strpos( $this->docxDocument, $key ) );
         $rightPart = substr( $this->docxDocument, strpos( $this->docxDocument, $key ) + strlen( $key ) );
         $this->docxDocument = $leftPart.$value.$rightPart;
