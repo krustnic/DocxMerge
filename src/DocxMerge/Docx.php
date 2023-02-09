@@ -211,7 +211,10 @@ class Docx {
 
         // Replace current file with tempFile content
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            copy( $tempFile, $this->docxPath );
+            $status = copy( $tempFile, $this->docxPath );
+            if ($status) {
+                unlink($tempFile);
+            }
         }
         else {
             rename($tempFile, $this->docxPath);
