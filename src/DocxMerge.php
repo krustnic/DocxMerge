@@ -17,7 +17,7 @@ class DocxMerge {
      * @param $outDocxFilePath
      * @return int
      */
-    public function merge( $docxFilesArray, $outDocxFilePath ) {
+    public function merge( $docxFilesArray, $outDocxFilePath, $addPageBreak = false) {
         if ( count($docxFilesArray) == 0 ) {
             // No files to merge
             return -1;
@@ -34,7 +34,7 @@ class DocxMerge {
 
         $docx = new Docx( $outDocxFilePath );
         for( $i=1; $i<count( $docxFilesArray ); $i++ ) {
-            $docx->addFile( $docxFilesArray[$i], "part".$i.".docx", "rId10".$i );
+            $docx->addFile( $docxFilesArray[$i], "part".$i.".docx", "rId10".$i, $addPageBreak);
         }
 
         $docx->flush();

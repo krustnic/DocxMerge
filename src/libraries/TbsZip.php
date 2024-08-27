@@ -17,6 +17,31 @@
 
     class TbsZip {
 
+        public $Meth8Ok;
+    	public $DisplayError;
+    	public $ArchFile;
+    	public $Error;
+    	
+    	// Compatibility PHP 8.2
+    	public $ArchHnd;
+    	public $ArchIsNew;
+    	public $CdEndPos;
+    	public $CdPos;
+    	public $CdInfo;
+    	public $ArchIsStream;
+    	public $CdFileLst;
+    	public $CdFileNbr;
+    	public $CdFileByName;
+    	public $VisFileLst;
+    	public $LastReadComp;
+    	public $LastReadIdx;
+    	public $ReplInfo;
+    	public $ReplByPos;
+    	public $AddInfo;
+    	public $OutputMode;
+    	public $OutputHandle;
+    	public $OutputSrc;
+        
         function __construct() {
             $this->Meth8Ok = extension_loaded('zlib'); // check if Zlib extension is available. This is need for compress and uncompress with method 8.
             $this->DisplayError = true;

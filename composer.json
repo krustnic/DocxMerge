@@ -1,5 +1,6 @@
 {
-  "name": "krustnic/docx-merge",
+  "name": "n-osennij/docx-merge",
+  "version": "1.1",
   "type": "library",
   "description": "Simple library for merging multiple MS Word \".docx\" files into one",
   "keywords": ["docx","merge","placeholder"],
